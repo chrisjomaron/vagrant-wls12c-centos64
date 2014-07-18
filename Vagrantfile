@@ -18,6 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.hostname = "vagrantcentos64.example.com"
 
+  # weblogic console will be on http://192.168.33.20:7001/console 
   config.vm.network :private_network, ip: "192.168.33.20"
 
   config.vm.provider :virtualbox do |vb|
@@ -31,4 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     puppet.options = "--verbose"
   end
 
+  # remove existing guest autodeploy dir and replace with a link to the mounted host folder subdir - just put app in here!
+  config.vm.provision "shell",
+    inline: "cd /oracle/product/Middleware12c/user_projects/domains/Wls12c && rm -rvf autodeploy && ln -vs /vagrant/autodeploy autodeploy && ls -l autodeploy"
 end
